@@ -22,6 +22,7 @@ import (
 	"x-ui/web/service"
 
 	"github.com/BurntSushi/toml"
+	"github.com/gin-contrib/gzip"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/cookie"
 	"github.com/gin-gonic/gin"
@@ -155,6 +156,8 @@ func (s *Server) initRouter() (*gin.Engine, error) {
 	}
 
 	engine := gin.Default()
+
+	engine.Use(gzip.Gzip(gzip.BestCompression))
 
 	secret, err := s.settingService.GetSecret()
 	if err != nil {
@@ -316,7 +319,7 @@ func (s *Server) startTask() {
 }
 
 func (s *Server) Start() (err error) {
-	//这是一个匿名函数，没没有函数名
+	// 这是一个匿名函数，没没有函数名
 	defer func() {
 		if err != nil {
 			s.Stop()
